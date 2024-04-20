@@ -60,11 +60,16 @@ jobs:
     - name: Get AKS kubeconfig
       run: az aks get-credentials --resource-group $RGNAME --name $AKSNAME
 
-    - uses: Charlyzzz/update-k8s-image@v1.7.1
+    - uses: Azure/k8s-deploy@v5
       with:
-        manifest-path: backend/manifests/dev/backend.deployment.yaml
-        new-image-tag: ${{env.SHA}}
-        container-name: backend 
+        namespace: 'demoapp'
+        manifests: |
+           backend/manifests/dev/backend.deployment.yaml
+        images: |
+           cognixacr.azurecr.io/demoapp/backendservice:${{env.SHA}}
+        imagepullsecrets: |
+          pullsecret
+        action: deploy
 
     # - name: Update API server manifest
     #   run:
