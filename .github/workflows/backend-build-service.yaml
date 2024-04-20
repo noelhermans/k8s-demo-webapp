@@ -64,7 +64,7 @@ jobs:
       with:
         manifest-path: backend/manifests/dev/backend.deployment.yaml
         new-image-tag: ${{env.SHA}}
-        name: backend 
+        container-name: backend 
 
     # - name: Update API server manifest
     #   run:
