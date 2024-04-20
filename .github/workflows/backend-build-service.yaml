@@ -1,9 +1,8 @@
-name: Build backend service
+name: BACKEND build service
 on:
   push:
     branches:
-      - master
-# trigger pipeline      
+      - master  
 
 env:
   RGNAME: AKS_RG
@@ -53,13 +52,20 @@ jobs:
           COGNIX_VERSION=${{env.SHA}}
           service=backend
 
-    # - name: Login to Azure
-    #   uses: azure/login@v1
-    #   with:
-    #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    # - name: Get AKS kubeconfig
-    #   run: az aks get-credentials --resource-group $RGNAME --name $AKSNAME
+    - name: Get AKS kubeconfig
+      run: az aks get-credentials --resource-group $RGNAME --name $AKSNAME
+
+    - name: Update-image
+      uses: Charlyzzz/update-k8s-image
+      with:
+        manifest-path: backend/manifests/dev/backend.deployment.yaml
+        new-image-tag: ${{env.SHA}}
+        name: backend 
 
     # - name: Update API server manifest
     #   run:
