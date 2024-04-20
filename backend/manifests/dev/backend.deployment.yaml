@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
-  
+  namespace: demoapp
 spec:
   selector:
     matchLabels:
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: localhost:5000/backend:latest
+        image: cognixacr.azurecr.io/cognix/apiservice:latest
         resources:
           limits:
             memory: "128Mi"
