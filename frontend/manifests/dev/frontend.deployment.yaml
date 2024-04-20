@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: cognixacr.azurecr.io/demoapp/frontendervice:latest
+        image: cognixacr.azurecr.io/demoapp/frontendservice:latest
         imagePullPolicy: Always        
         resources:
           limits:
