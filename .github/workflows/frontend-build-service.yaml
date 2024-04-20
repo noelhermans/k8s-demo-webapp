@@ -36,10 +36,10 @@ jobs:
         platforms: linux/amd64
         push: true
         tags: |
-          ${{ env.ACRNAME }}.azurecr.io/demoapp/frontendservice:$(echo ${GITHUB_SHA} | cut -c1-8)
+          ${{ env.ACRNAME }}.azurecr.io/demoapp/frontendservice:$(echo ${{GITHUB_SHA}} | cut -c1-8)
           
         build-args: |
-          COGNIX_VERSION=$(echo ${GITHUB_SHA} | cut -c1-8)
+          COGNIX_VERSION=$(echo ${{GITHUB_SHA}} | cut -c1-8)
           service=frontend
 
     # - name: Login to Azure
