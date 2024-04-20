@@ -2,7 +2,7 @@ name: Build frontend service
 on:
   push:
     branches:
-      - main
+      - master
 # trigger pipeline
 env:
   RGNAME: AKS_RG

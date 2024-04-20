@@ -2,7 +2,7 @@ name: Build backend service
 on:
   push:
     branches:
-      - main
+      - master
 # trigger pipeline      
 
 env:
