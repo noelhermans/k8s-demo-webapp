@@ -42,16 +42,40 @@ jobs:
     - name: Backend Demo Service Image Docker Build and Push
       uses: docker/build-push-action@v2
       with:
-        context: ./backend
-        file: ./backend/Dockerfile
+        context: ./frontend
+        file: ./frontend/Dockerfile
         platforms: linux/amd64
         push: true
         tags: |
-          ${{ env.ACRNAME }}.azurecr.io/demoapp/frontendservice:${{env.SHA}}
-          
+          ${{ env.ACRNAME }}.azurecr.io/demoapp/frontendservice:${{env.SHA}}          
         build-args: |
           COGNIX_VERSION=${{env.SHA}}
           service=frontend
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Get AKS kubeconfig
+      run: az aks get-credentials --resource-group $RGNAME --name $AKSNAME
+
+    - uses: azure/k8s-bake@v3
+      with:
+        renderEngine: kustomize
+        kustomizationPath: ./frontend/manifests/dev/
+        kubectl-version: 'latest'
+      id: bake
+    
+    - uses: Azure/k8s-deploy@v5
+      with:
+        namespace: 'demoapp'
+        action: deploy
+        manifests: ${{ steps.bake.outputs.manifestsBundle }}
+        images: |
+            cognixacr.azurecr.io/demoapp/frontendservice:${{env.SHA}}
+        imagepullsecrets: |
+            pullsecret
 
     # - name: Login to Azure
     #   uses: azure/login@v1
