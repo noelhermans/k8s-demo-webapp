@@ -9,7 +9,6 @@ env:
   ACRNAME: cognixacr
   AKSNAME: Cognix_AKS
   GITHUB_SHA: ${{ github.sha }}
-  SHA8: ${GITHUB_SHA::8}
 
 jobs:
   build-frontend-and-push:
@@ -37,9 +36,10 @@ jobs:
         platforms: linux/amd64
         push: true
         tags: |
-          ${{ env.ACRNAME }}.azurecr.io/demoapp/frontendservice:${{env.SHA8}}
+          ${{ env.ACRNAME }}.azurecr.io/demoapp/frontendservice:$(echo ${GITHUB_SHA} | cut -c1-8)
+          
         build-args: |
-          COGNIX_VERSION=${{env.SHA8}}
+          COGNIX_VERSION=$(echo ${GITHUB_SHA} | cut -c1-8)
           service=frontend
 
     # - name: Login to Azure
@@ -52,7 +52,7 @@ jobs:
 
     # - name: Update API server manifest
     #   run:
-    #     sed -ie "s/apiservice:main/apiservice:${{env.SHA8}}/g" ./backend/api-service-deployment.yaml
+    #     sed -ie "s/apiservice:main/apiservice:$(echo ${GITHUB_SHA} | cut -c1-8)/g" ./backend/api-service-deployment.yaml
 
     # - name: Deploy API server manifests
     #   run: |
