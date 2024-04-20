@@ -4,3 +4,4 @@ namespace: demoapp
 
 resources:
   - backend.deployment.yaml
+  - backend.service.yaml
