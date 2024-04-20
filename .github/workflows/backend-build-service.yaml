@@ -9,7 +9,7 @@ env:
   RGNAME: AKS_RG
   ACRNAME: cognixacr
   AKSNAME: Cognix_AKS
-  GITHUB_SHA: ${{ github.sha::8 }}
+  GITHUB_SHA: ${{ github.sha[0:8] }}
 
 jobs:
   build-backend-and-push:

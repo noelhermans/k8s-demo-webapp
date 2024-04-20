@@ -8,7 +8,7 @@ env:
   RGNAME: AKS_RG
   ACRNAME: cognixacr
   AKSNAME: Cognix_AKS
-  GITHUB_SHA: ${{ github.sha }}
+  GITHUB_SHA: ${{ github.sha[0:8] }}
 
 jobs:
   build-frontend-and-push:
@@ -36,10 +36,10 @@ jobs:
         platforms: linux/amd64
         push: true
         tags: |
-          ${{ env.ACRNAME }}.azurecr.io/demoapp/frontendservice:$(echo ${{GITHUB_SHA}} | cut -c1-8)
+          ${{ env.ACRNAME }}.azurecr.io/demoapp/frontendservice:${{GITHUB_SHA}}
           
         build-args: |
-          COGNIX_VERSION=$(echo ${{GITHUB_SHA}} | cut -c1-8)
+          COGNIX_VERSION=${{GITHUB_SHA}}
           service=frontend
 
     # - name: Login to Azure
