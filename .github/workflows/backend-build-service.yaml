@@ -60,16 +60,33 @@ jobs:
     - name: Get AKS kubeconfig
       run: az aks get-credentials --resource-group $RGNAME --name $AKSNAME
 
+    - uses: azure/k8s-bake@v3
+      with:
+        renderEngine: kustomize
+        kustomizationPath: ./backend/manifests/dev/
+        kubectl-version: 'latest'
+      id: bake
+
     - uses: Azure/k8s-deploy@v5
       with:
-        namespace: 'demoapp'
-        manifests: |
-           backend/manifests/dev/backend.deployment.yaml
-        images: |
-           cognixacr.azurecr.io/demoapp/backendservice:${{env.SHA}}
-        imagepullsecrets: |
-          pullsecret
-        action: deploy
+         namespace: 'demoapp'
+         action: deploy
+         manifests: ${{ steps.bake.outputs.manifestsBundle }}
+         images: |
+            cognixacr.azurecr.io/demoapp/backendservice:${{env.SHA}}
+         imagepullsecrets: |
+            pullsecret
+
+    # - uses: Azure/k8s-deploy@v5
+    #   with:
+    #     namespace: 'demoapp'
+    #     manifests: |
+    #        backend/manifests/dev/backend.deployment.yaml
+    #     images: |
+    #        cognixacr.azurecr.io/demoapp/backendservice:${{env.SHA}}
+    #     imagepullsecrets: |
+    #       pullsecret
+    #     action: deploy
 
     # - name: Update API server manifest
     #   run:

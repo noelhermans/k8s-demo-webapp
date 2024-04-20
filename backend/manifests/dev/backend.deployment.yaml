@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: backend
-        image: cognixacr.azurecr.io/cognix/apiservice:latest
+        image: cognixacr.azurecr.io/demoapp/backendservice:latest
+        imagePullPolicy: Always
         resources:
           limits:
             memory: "128Mi"
