@@ -60,7 +60,7 @@ jobs:
     - name: Get AKS kubeconfig
       run: az aks get-credentials --resource-group $RGNAME --name $AKSNAME
 
-    - name: Update-image
+    - id: update-image
       uses: Charlyzzz/update-k8s-image
       with:
         manifest-path: backend/manifests/dev/backend.deployment.yaml
